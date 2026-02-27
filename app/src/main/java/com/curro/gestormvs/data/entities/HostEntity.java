@@ -3,6 +3,8 @@ package com.curro.gestormvs.data.entities;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
 
 @Entity(tableName = "hosts")
 public class HostEntity {
@@ -15,6 +17,7 @@ public class HostEntity {
     @ColumnInfo(name = "user")
     public String user;
 
+    @PrimaryKey
     @NonNull
     @ColumnInfo(name = "ip")
     public String ip;
