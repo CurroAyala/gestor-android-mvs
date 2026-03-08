@@ -43,8 +43,9 @@ public class MainActivity extends AppCompatActivity {
             navController = navHostFragment.getNavController();
 
             AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                    //TODO: añadir los IDs del nav_graph.xml de las pantallas principales
-                    // (Inicio, añadir host y ajustes)
+                    R.id.hostListFragment,
+                    R.id.hostAddFragment,
+                    R.id.settingsFragment
             ).build();
 
             NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
