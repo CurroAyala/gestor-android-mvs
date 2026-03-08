@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_graph">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/hostListFragment">
+
+    <fragment
+        android:id="@+id/hostListFragment"
+        android:name="com.curro.gestormvs.ui.hosts.HostListFragment"
+        tools:layout="@layout/fragment_host_list" />
+
+    <fragment
+        android:id="@+id/hostAddFragment"
+        android:name="com.curro.gestormvs.ui.hosts.HostAddFragment"
+        tools:layout="@layout/fragment_host_add" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.curro.gestormvs.ui.settings.SettingsFragment"
+        tools:layout="@layout/fragment_settings" />
 
 </navigation>
