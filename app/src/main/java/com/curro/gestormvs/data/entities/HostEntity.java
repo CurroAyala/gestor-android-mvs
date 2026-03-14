@@ -9,6 +9,10 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "hosts")
 public class HostEntity {
 
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    public long id;
+
     @NonNull
     @ColumnInfo(name = "name")
     public String name;
@@ -17,7 +21,6 @@ public class HostEntity {
     @ColumnInfo(name = "user")
     public String user;
 
-    @PrimaryKey
     @NonNull
     @ColumnInfo(name = "ip")
     public String ip;
@@ -26,13 +29,18 @@ public class HostEntity {
     @ColumnInfo(name = "port")
     public Integer port;
 
-    public HostEntity() { }
+    @NonNull
+    @ColumnInfo(name = "password")
+    public String encryptedPassword;
 
-    public HostEntity(@NonNull String name, @NonNull String user, @NonNull String ip, @NonNull Integer port) {
+
+    public HostEntity(long id, @NonNull String name, @NonNull String user, @NonNull String ip, @NonNull Integer port, @NonNull String encryptedPassword) {
+        this.id = id;
         this.name = name;
         this.user = user;
         this.ip = ip;
         this.port = port;
+        this.encryptedPassword = encryptedPassword;
     }
 
 }

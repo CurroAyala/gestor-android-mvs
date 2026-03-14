@@ -2,13 +2,15 @@ package com.curro.gestormvs.domain.models;
 
 public class Host {
 
+    private long id;
     private String name;
     private String user;
     private String ip;
     private Integer port;
     private String password;
 
-    public Host(String name, String user, String ip, Integer port, String password) {
+    public Host(long id, String name, String user, String ip, Integer port, String password) {
+        this.id = id;
         this.name = name;
         this.user = user;
         this.ip = ip;
@@ -16,7 +18,12 @@ public class Host {
         this.password = password;
     }
 
+
     // Getters and Setters
+
+    public long getId() { return id; }
+
+    public void setId(long id) { this.id = id; }
 
     public String getName() {
         return name;
