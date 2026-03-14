@@ -6,12 +6,14 @@ public class Host {
     private String user;
     private String ip;
     private Integer port;
+    private String password;
 
-    public Host(String name, String user, String ip, Integer port) {
+    public Host(String name, String user, String ip, Integer port, String password) {
         this.name = name;
         this.user = user;
         this.ip = ip;
         this.port = port;
+        this.password = password;
     }
 
     // Getters and Setters
@@ -47,4 +49,8 @@ public class Host {
     public void setPort(Integer port) {
         this.port = port;
     }
+
+    public String getPassword() { return password; }
+
+    public void setPassword(String password) { this.password = password; }
 }
