@@ -26,6 +26,8 @@ public class HostEntity {
     @ColumnInfo(name = "port")
     public Integer port;
 
+    public HostEntity() { }
+
     public HostEntity(@NonNull String name, @NonNull String user, @NonNull String ip, @NonNull Integer port) {
         this.name = name;
         this.user = user;

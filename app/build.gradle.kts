@@ -54,4 +54,6 @@ dependencies {
 
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
+
+    implementation(libs.tink.android)
 }
