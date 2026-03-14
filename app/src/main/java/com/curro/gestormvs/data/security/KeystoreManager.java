@@ -18,7 +18,7 @@ public class KeystoreManager {
 
     private static final String KEYSET_NAME      = "GAMV_Keystore";
     private static final String PREF_FILE_NAME   = "keyset_prefs";
-    private static final String MASTER_KEY_URI   = "android-keystore://master_key";
+    private static final String MASTER_KEY_URI   = "android-keystore://gamv_key";
 
     private final Aead aead; // Encryption scheme
 
