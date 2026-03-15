@@ -1,10 +1,31 @@
 <resources>
     <string name="app_name">GAMV</string>
 
+
+    <!--    Bottom menu     -->
     <string name="home_button_title">Home</string>
     <string name="add_host_button_title">Add</string>
     <string name="settings_button_title">Settings</string>
 
+    <!--    Host item       -->
+    <string name="server_icon">Server icon</string>
+    <string name="edit_host">Edit host</string>
+    <string name="delete_host">Delete host</string>
+
+    <!--    Home screen     -->
+    <string name="no_hosts_msg">There are no saved hosts.</string>
+    <string name="tap_to_add">Tap on Add button to create one.</string>
+    <string name="input_host_name">Host name</string>
+    <string name="host_name_ex">Ex: School server</string>
+    <string name="input_ip">Host IP</string>
+    <string name="ip_ex">192.168.1.X</string>
+    <string name="input_port">Port</string>
+    <string name="port_22">22</string>
+    <string name="input_user">User</string>
+    <string name="user_ex">Ex: root</string>
+    <string name="input_password">Password</string>
+    <string name="save_password">Save password (optional)</string>
+    <string name="save_btn">Save</string>
 
 
 </resources>
