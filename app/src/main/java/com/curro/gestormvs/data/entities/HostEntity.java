@@ -29,12 +29,11 @@ public class HostEntity {
     @ColumnInfo(name = "port")
     public Integer port;
 
-    @NonNull
     @ColumnInfo(name = "password")
     public String encryptedPassword;
 
 
-    public HostEntity(long id, @NonNull String name, @NonNull String user, @NonNull String ip, @NonNull Integer port, @NonNull String encryptedPassword) {
+    public HostEntity(long id, @NonNull String name, @NonNull String user, @NonNull String ip, @NonNull Integer port, String encryptedPassword) {
         this.id = id;
         this.name = name;
         this.user = user;
