@@ -19,9 +19,6 @@ public class HostRepository {
     private final KeystoreManager keystoreManager;
 
 
-    private static final String AAD = "gamv_host_password";
-
-
     public HostRepository(HostDao hostDao, Context context) {
         try {
             keystoreManager = new KeystoreManager(context);
@@ -39,7 +36,7 @@ public class HostRepository {
 
             List<HostEntity> entities = hostDao.getAllHosts();
             for (HostEntity entity : entities) {
-                String decryptedPassword = keystoreManager.decrypt(entity.encryptedPassword, AAD);
+                String decryptedPassword = keystoreManager.decrypt(entity.encryptedPassword, "");
                 res.add(HostMapper.toDomain(entity, decryptedPassword));
             }
 
@@ -53,7 +50,7 @@ public class HostRepository {
     public Host getHostById(long id) {
         try {
             HostEntity entity = hostDao.getHostById(id);
-            String decryptedPassword = keystoreManager.decrypt(entity.encryptedPassword, AAD);
+            String decryptedPassword = keystoreManager.decrypt(entity.encryptedPassword, "");
             return HostMapper.toDomain(entity, decryptedPassword);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -63,7 +60,7 @@ public class HostRepository {
     public Host getHostByIp(String ip) {
         try {
             HostEntity entity = hostDao.getHostByIp(ip);
-            String decryptedPassword = keystoreManager.decrypt(entity.encryptedPassword, AAD);
+            String decryptedPassword = keystoreManager.decrypt(entity.encryptedPassword, "");
             return HostMapper.toDomain(entity, decryptedPassword);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -72,7 +69,7 @@ public class HostRepository {
 
     public void createHost(Host host) {
         try {
-            String encryptedPassword = keystoreManager.encrypt(host.getPassword(), AAD);
+            String encryptedPassword = keystoreManager.encrypt(host.getPassword(), "");
             HostEntity entity = HostMapper.toEntity(host, encryptedPassword);
             hostDao.createHost(entity);
         } catch (Exception e) {
@@ -82,7 +79,7 @@ public class HostRepository {
 
     public void updateHost(Host host) {
         try {
-            String encryptedPassword = keystoreManager.encrypt(host.getPassword(), AAD);
+            String encryptedPassword = keystoreManager.encrypt(host.getPassword(), "");
             HostEntity entity = HostMapper.toEntity(host, encryptedPassword);
             hostDao.updateHost(entity);
         } catch (Exception e) {
@@ -92,7 +89,7 @@ public class HostRepository {
 
     public void deleteHost(Host host) {
         try {
-            String encryptedPassword = keystoreManager.encrypt(host.getPassword(), AAD);
+            String encryptedPassword = keystoreManager.encrypt(host.getPassword(), "");
             HostEntity entity = HostMapper.toEntity(host, encryptedPassword);
             hostDao.deleteHost(entity);
         } catch (Exception e) {
