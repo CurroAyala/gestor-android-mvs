@@ -50,6 +50,10 @@ public class HostRepository {
     public Host getHostById(long id) {
         try {
             HostEntity entity = hostDao.getHostById(id);
+            if (entity == null) {
+                return null;
+            }
+
             String decryptedPassword = keystoreManager.decrypt(entity.encryptedPassword, "");
             return HostMapper.toDomain(entity, decryptedPassword);
         } catch (Exception e) {
@@ -60,6 +64,10 @@ public class HostRepository {
     public Host getHostByIp(String ip) {
         try {
             HostEntity entity = hostDao.getHostByIp(ip);
+            if (entity == null) {
+                return null;
+            }
+
             String decryptedPassword = keystoreManager.decrypt(entity.encryptedPassword, "");
             return HostMapper.toDomain(entity, decryptedPassword);
         } catch (Exception e) {

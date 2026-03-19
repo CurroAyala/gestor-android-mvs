@@ -45,11 +45,15 @@ public class KeystoreManager {
      * @return          Base64-encoded ciphertext, or null if encryption failed
      */
     public String encrypt(String plainText, String aad) throws Exception {
-            byte[] ciphertext = aead.encrypt(
-                    plainText.getBytes(StandardCharsets.UTF_8),
-                    aad.getBytes(StandardCharsets.UTF_8)
-            );
-            return Base64.getEncoder().encodeToString(ciphertext);
+        if (plainText == null || plainText.isEmpty()) {
+            return null;
+        }
+
+        byte[] ciphertext = aead.encrypt(
+                plainText.getBytes(StandardCharsets.UTF_8),
+                aad.getBytes(StandardCharsets.UTF_8)
+        );
+        return Base64.getEncoder().encodeToString(ciphertext);
     }
 
     /**
@@ -60,6 +64,10 @@ public class KeystoreManager {
      * @return              Decrypted plain text, or null if decryption failed
      */
     public String decrypt(String encryptedText, String aad) throws Exception {
+        if (encryptedText == null || encryptedText.isEmpty()) {
+            return null;
+        }
+
         byte[] ciphertext = Base64.getDecoder().decode(encryptedText);
         byte[] plaintext  = aead.decrypt(
                 ciphertext,
