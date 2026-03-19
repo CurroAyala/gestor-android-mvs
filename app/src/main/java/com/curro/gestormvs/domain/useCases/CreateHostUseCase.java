@@ -39,19 +39,19 @@ public class CreateHostUseCase {
 
     private void validStrings(Host host) {
 
-        if (host.getName().length() > 50 ) {
+        if (host.getName().length() > 20 ) {
             throw new IllegalArgumentException("Name field cannot be longer than 20 characters.");
         }
 
-        if (host.getUser().length() > 50 ) {
+        if (host.getUser().length() > 20 ) {
             throw new IllegalArgumentException("User field cannot be longer than 20 characters.");
         }
 
         if (!host.getIp().matches("^([a-zA-Z0-9-]+\\.){3}[a-zA-Z0-9-]+$")) {
-            throw new IllegalArgumentException("IP field must be a valid IPv4 address.");
+            throw new IllegalArgumentException("IP field must be a valid IPv4 or domain address.");
         }
 
-        if (host.getPassword().length() > 20) {
+        if (host.getPassword() != null && host.getPassword().length() > 20) {
             throw new IllegalArgumentException("Password field cannot be longer than 20 characters.");
         }
 
