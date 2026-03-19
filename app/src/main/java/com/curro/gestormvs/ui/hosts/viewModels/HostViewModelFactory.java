@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.curro.gestormvs.data.repositories.HostRepository;
 import com.curro.gestormvs.domain.useCases.CreateHostUseCase;
+import com.curro.gestormvs.domain.useCases.DeleteHostUseCase;
 import com.curro.gestormvs.domain.useCases.ListHostsUseCase;
 
 
@@ -34,7 +35,8 @@ public class HostViewModelFactory implements ViewModelProvider.Factory {
 
         if (modelClass.isAssignableFrom(HostListViewModel.class)) {
             ListHostsUseCase listUseCase = new ListHostsUseCase(repository);
-            return (T) new HostListViewModel(listUseCase);
+            DeleteHostUseCase deleteUseCase = new DeleteHostUseCase(repository);
+            return (T) new HostListViewModel(listUseCase, deleteUseCase);
         }
 
         else if (modelClass.isAssignableFrom(HostCreateViewModel.class)) {

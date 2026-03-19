@@ -39,8 +39,8 @@ public class HostListFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        setupRecyclerView();
         setupViewModel();
+        setupRecyclerView();
     }
 
     private void setupRecyclerView() {
@@ -52,7 +52,7 @@ public class HostListFragment extends Fragment {
 
             @Override
             public void onDelete(Host host) {
-                // TODO: delete action
+                viewModel.deleteHost(host);
             }
         });
 
