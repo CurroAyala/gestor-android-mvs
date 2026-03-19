@@ -23,8 +23,7 @@
     <string name="port_22">22</string>
     <string name="input_user">User</string>
     <string name="user_ex">Ex: root</string>
-    <string name="input_password">Password</string>
-    <string name="save_password">Save password (optional)</string>
+    <string name="input_password">Password (optional)</string>
     <string name="save_btn">Save</string>
 
 
