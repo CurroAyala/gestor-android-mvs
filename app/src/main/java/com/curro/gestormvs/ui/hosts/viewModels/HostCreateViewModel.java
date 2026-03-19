@@ -27,7 +27,7 @@ public class HostCreateViewModel extends ViewModel {
     }
 
 
-    public void saveNewHost(String name, String user, String ip, String portText, String password) {
+    public void saveNewHost(String name, String user, String ip, String portText, String passwordText) {
         executorService.execute(() -> {
             try {
                 int port;
@@ -35,6 +35,13 @@ public class HostCreateViewModel extends ViewModel {
                     port = 22;
                 } else {
                     port = Integer.parseInt(portText);
+                }
+
+                String password;
+                if (passwordText.isBlank()) {
+                    password = null;
+                } else {
+                    password = passwordText.trim();
                 }
 
                 Host newHost = new Host(0, name, user, ip, port, password);
