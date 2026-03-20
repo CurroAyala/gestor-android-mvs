@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
@@ -47,7 +48,11 @@ public class HostListFragment extends Fragment {
         adapter = new HostAdapter(new HostAdapter.OnHostActionListener() {
             @Override
             public void onEdit(Host host) {
-                // TODO: edit action
+                // When changing Fragment, the ID is sent as an argument, via Safe Args.
+                HostListFragmentDirections.ActionHostListFragmentToHostUpdateFragment action =
+                        HostListFragmentDirections.actionHostListFragmentToHostUpdateFragment(host.getId());
+
+                Navigation.findNavController(requireView()).navigate(action);
             }
 
             @Override
