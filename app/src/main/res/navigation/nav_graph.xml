@@ -8,7 +8,12 @@
     <fragment
         android:id="@+id/hostListFragment"
         android:name="com.curro.gestormvs.ui.hosts.HostListFragment"
-        tools:layout="@layout/fragment_host_list" />
+        tools:layout="@layout/fragment_host_list">
+
+        <action
+            android:id="@+id/action_hostListFragment_to_hostUpdateFragment"
+            app:destination="@id/hostUpdateFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/hostAddFragment"
@@ -19,5 +24,14 @@
         android:id="@+id/settingsFragment"
         android:name="com.curro.gestormvs.ui.settings.SettingsFragment"
         tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/hostUpdateFragment"
+        android:name="com.curro.gestormvs.ui.hosts.HostUpdateFragment">
+
+        <argument
+            android:name="hostId"
+            app:argType="long"/>
+    </fragment>
 
 </navigation>
