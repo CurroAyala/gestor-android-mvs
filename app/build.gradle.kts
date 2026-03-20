@@ -35,6 +35,12 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
+    testOptions {
+        unitTests.all {
+            it.jvmArgs("-XX:+EnableDynamicAgentLoading", "-Xshare:off")
+        }
+    }
+
     buildFeatures {
         viewBinding = true
     }
