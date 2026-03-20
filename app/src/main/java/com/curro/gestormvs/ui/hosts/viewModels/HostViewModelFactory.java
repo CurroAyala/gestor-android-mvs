@@ -8,6 +8,7 @@ import com.curro.gestormvs.data.repositories.HostRepository;
 import com.curro.gestormvs.domain.useCases.CreateHostUseCase;
 import com.curro.gestormvs.domain.useCases.DeleteHostUseCase;
 import com.curro.gestormvs.domain.useCases.ListHostsUseCase;
+import com.curro.gestormvs.domain.useCases.UpdateHostUseCase;
 
 
 /**
@@ -42,6 +43,11 @@ public class HostViewModelFactory implements ViewModelProvider.Factory {
         else if (modelClass.isAssignableFrom(HostCreateViewModel.class)) {
             CreateHostUseCase createUseCase = new CreateHostUseCase(repository);
             return (T) new HostCreateViewModel(createUseCase);
+        }
+
+        else if (modelClass.isAssignableFrom(HostUpdateViewModel.class)) {
+            UpdateHostUseCase updateUseCase = new UpdateHostUseCase(repository);
+            return (T) new HostUpdateViewModel(updateUseCase);
         }
 
         throw new IllegalArgumentException("Unknown ViewModel class");
