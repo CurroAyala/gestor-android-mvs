@@ -57,4 +57,6 @@ dependencies {
     implementation(libs.navigation.ui)
 
     implementation(libs.tink.android)
+
+    testImplementation(libs.mockito)
 }

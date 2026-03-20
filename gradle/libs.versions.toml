@@ -11,6 +11,7 @@ constraintlayout = "2.1.4"
 navigation = "2.9.7"
 tink = "1.20.0"
 safeArgs = "2.9.7"
+mockito = "5.23.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -26,6 +27,7 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigation" }
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigation" }
 tink-android = { group = "com.google.crypto.tink", name = "tink-android", version.ref = "tink" }
+mockito = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
