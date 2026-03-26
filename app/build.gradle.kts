@@ -65,4 +65,6 @@ dependencies {
     implementation(libs.tink.android)
 
     testImplementation(libs.mockito)
+
+    implementation(libs.jsch)
 }

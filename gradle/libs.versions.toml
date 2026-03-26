@@ -12,6 +12,7 @@ navigation = "2.9.7"
 tink = "1.20.0"
 safeArgs = "2.9.7"
 mockito = "5.23.0"
+jsch = "2.27.9"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -28,6 +29,8 @@ navigation-fragment = { group = "androidx.navigation", name = "navigation-fragme
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigation" }
 tink-android = { group = "com.google.crypto.tink", name = "tink-android", version.ref = "tink" }
 mockito = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
+jsch = { group = "com.github.mwiede", name = "jsch", version.ref = "jsch" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
