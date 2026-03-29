@@ -27,10 +27,29 @@
     <string name="user_ex">Ex: root</string>
     <string name="input_password">Password (optional)</string>
     <string name="save_btn">Save</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!--    Update screen     -->
     <string name="update_host_title">Update host</string>
+
+    <!--    Virtual machine item     -->
+    <string name="power_vm">Power button</string>
+    <string name="restart_vm">Restart button</string>
+    <string name="sleep_vm">Sleep button</string>
+    <string name="pause_vm">Pause button</string>
+    <string name="snapshots_vm">Snapshots button</string>
+    <string name="snapshot_vm">Create snapshot button</string>
+    <string name="vm_icon">Desktop icon</string>
+
+    <!--    Password dialog     -->
+    <string name="dialog_password_title">SSH Password</string>
+    <string name="dialog_password_host_msg">Host: %s</string>
+    <string name="cancel_btn">Cancel</string>
+    <string name="connect_btn">Connect</string>
+    <string name="error_password_empty">Password cannot be empty.</string>
+    <string name="input_password_2">Write the password</string>
+
+    <!--    List VMs screen     -->
+    <string name="no_vms_msg">There are no virtual machines.</string>
 
 
 </resources>

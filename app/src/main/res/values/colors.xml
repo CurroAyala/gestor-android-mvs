@@ -26,6 +26,7 @@
         <color name="primary">#FF00BCD4</color>
         <color name="primary_dark">#FF00ACC1</color>
         <color name="primary_container">#FF1A3A3F</color>
+        <color name="primary_light">#00BCD4</color>
 
         <!-- ===================== -->
         <!--         TEXTS         -->
@@ -46,6 +47,10 @@
         <color name="state_shutoff_bg">#FF3A3A3A</color>
         <color name="state_shutoff_text">#FF9E9E9E</color>
 
+        <color name="status_running_text">#4CAF50</color>
+        <color name="status_paused_text">#FFB300</color>
+        <color name="status_shutoff_text">#B0BEC5</color>
+
         <!-- ===================== -->
         <!--         STATUS        -->
         <!-- ===================== -->
@@ -57,5 +62,7 @@
         <!--         EDGES         -->
         <!-- ===================== -->
         <color name="border_default">#FF333333</color>
+
+
 
 </resources>
