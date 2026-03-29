@@ -4,12 +4,12 @@ public class VirtualMachine {
 
     private Integer id;
     private String name;
-    private String status;
+    private String state;
 
-    public VirtualMachine(Integer id, String name, String status) {
+    public VirtualMachine(Integer id, String name, String state) {
         this.id = id;
         this.name = name;
-        this.status = status;
+        this.state = state;
     }
 
     // Getters and Setters
@@ -30,11 +30,11 @@ public class VirtualMachine {
         this.name = name;
     }
 
-    public String getStatus() {
-        return status;
+    public String getState() {
+        return state;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setState(String state) {
+        this.state = state;
     }
 }
