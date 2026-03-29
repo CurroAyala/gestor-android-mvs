@@ -1,0 +1,107 @@
+package com.curro.gestormvs.ui.virtualMachines;
+
+import android.content.Context;
+import android.content.res.ColorStateList;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.curro.gestormvs.R;
+import com.curro.gestormvs.databinding.ItemVmBinding;
+import com.curro.gestormvs.domain.models.VirtualMachine;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class VirtualMachineAdapter extends RecyclerView.Adapter<VirtualMachineAdapter.VirtualMachineViewHolder> {
+
+    public interface OnVirtualMachineActionListener {
+        // TODO: void onViewSnapshots(VirtualMachine vm);
+    }
+
+
+    private List<VirtualMachine> vms = new ArrayList<>();
+    private final OnVirtualMachineActionListener listener;
+
+    public VirtualMachineAdapter(OnVirtualMachineActionListener listener) {
+        this.listener = listener;
+    }
+
+    public void submitList(List<VirtualMachine> newVms) {
+        this.vms = newVms;
+        notifyDataSetChanged(); // TODO: improve this using DiffUtil
+    }
+
+    @NonNull
+    @Override
+    public VirtualMachineAdapter.VirtualMachineViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        ItemVmBinding binding = ItemVmBinding.inflate(
+                LayoutInflater.from(parent.getContext()), parent, false
+        );
+        return new VirtualMachineViewHolder(binding);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull VirtualMachineAdapter.VirtualMachineViewHolder holder, int position) {
+        holder.bind(vms.get(position));
+    }
+
+    @Override
+    public int getItemCount() {
+        return vms.size();
+    }
+
+    public static class VirtualMachineViewHolder extends RecyclerView.ViewHolder {
+
+        private final ItemVmBinding binding;
+
+        VirtualMachineViewHolder(ItemVmBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        void bind(VirtualMachine vm) {
+            // binding.tvVmId.setText(vm.getId());
+            binding.tvVmName.setText(vm.getName());
+            binding.tvVmState.setText(vm.getState());
+            applyStatusStyle(vm.getState());
+
+            // TODO: binding buttons
+        }
+
+        // Aux method -------------------------
+        private void applyStatusStyle(String status) {
+            Context ctx = binding.getRoot().getContext();
+
+            int bgColor;
+            int textColor;
+
+            switch (status.trim().toLowerCase()) {
+                case "running":
+                    bgColor   = ContextCompat.getColor(ctx, R.color.state_running_bg);
+                    textColor = ContextCompat.getColor(ctx, R.color.state_running_text);
+                    break;
+                case "paused":
+                case "suspended":
+                case "pmsuspended":
+                    bgColor   = ContextCompat.getColor(ctx, R.color.state_paused_bg);
+                    textColor = ContextCompat.getColor(ctx, R.color.state_paused_text);
+                    break;
+                case "shut off":
+                case "crashed":
+                default:
+                    bgColor   = ContextCompat.getColor(ctx, R.color.state_shutoff_bg);
+                    textColor = ContextCompat.getColor(ctx, R.color.state_shutoff_text);
+                    break;
+            }
+
+            binding.tvVmState.setBackgroundTintList(ColorStateList.valueOf(bgColor));
+            binding.tvVmState.setTextColor(textColor);
+        }
+
+    }
+
+}
