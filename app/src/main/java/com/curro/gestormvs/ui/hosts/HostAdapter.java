@@ -17,6 +17,7 @@ public class HostAdapter extends RecyclerView.Adapter<HostAdapter.HostViewHolder
     public interface OnHostActionListener {
         void onEdit(Host host);
         void onDelete(Host host);
+        void onConnect(Host host);
     }
 
     private List<Host> hosts = new ArrayList<>();
@@ -65,6 +66,8 @@ public class HostAdapter extends RecyclerView.Adapter<HostAdapter.HostViewHolder
 
             binding.btnEdit.setOnClickListener(v -> listener.onEdit(host));
             binding.btnDelete.setOnClickListener(v -> listener.onDelete(host));
+
+            binding.getRoot().setOnClickListener(v -> listener.onConnect(host));
         }
     }
 }

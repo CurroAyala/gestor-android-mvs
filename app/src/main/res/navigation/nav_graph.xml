@@ -13,6 +13,10 @@
         <action
             android:id="@+id/action_hostListFragment_to_hostUpdateFragment"
             app:destination="@id/hostUpdateFragment" />
+
+        <action
+            android:id="@+id/action_hostListFragment_to_vmListFragment"
+            app:destination="@id/virtualMachineListFragment" />
     </fragment>
 
     <fragment
@@ -32,6 +36,16 @@
         <argument
             android:name="hostId"
             app:argType="long"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/virtualMachineListFragment"
+        android:name="com.curro.gestormvs.ui.virtualMachines.VirtualMachineListFragment"
+        tools:layout="@layout/fragment_virtual_machine_list">
+
+        <argument
+            android:name="hostId"
+            app:argType="long" />
     </fragment>
 
 </navigation>

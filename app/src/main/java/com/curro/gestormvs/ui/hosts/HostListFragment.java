@@ -59,6 +59,13 @@ public class HostListFragment extends Fragment {
             public void onDelete(Host host) {
                 viewModel.deleteHost(host);
             }
+
+            @Override
+            public void onConnect(Host host) {
+                HostListFragmentDirections.ActionHostListFragmentToVmListFragment action =
+                        HostListFragmentDirections.actionHostListFragmentToVmListFragment(host.getId());
+                Navigation.findNavController(requireView()).navigate(action);
+            }
         });
 
         binding.recyclerHosts.setLayoutManager(new LinearLayoutManager(requireContext()));
