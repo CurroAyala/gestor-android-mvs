@@ -6,9 +6,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.curro.gestormvs.data.repositories.HostRepository;
 import com.curro.gestormvs.data.repositories.SshRepository;
+import com.curro.gestormvs.domain.useCases.CheckVMStateUseCase;
 import com.curro.gestormvs.domain.useCases.ConnectHostUseCase;
 import com.curro.gestormvs.domain.useCases.DisconnectHostUseCase;
 import com.curro.gestormvs.domain.useCases.ListVMsUseCase;
+import com.curro.gestormvs.domain.useCases.PowerVMUseCase;
+import com.curro.gestormvs.domain.useCases.RebootVMUseCase;
 
 
 /**
@@ -26,9 +29,13 @@ public class VirtualMachineViewModelFactory implements ViewModelProvider.Factory
     private final HostRepository hostRepository;
     private final SshRepository repository;
 
-    public VirtualMachineViewModelFactory(HostRepository hostRepository, SshRepository repository) {
+    private final CheckVMStateUseCase checkVMStateUseCase;
+
+    public VirtualMachineViewModelFactory(HostRepository hostRepository, SshRepository repository,
+                                          CheckVMStateUseCase checkVMStateUseCase) {
         this.hostRepository = hostRepository;
         this.repository = repository;
+        this.checkVMStateUseCase = checkVMStateUseCase;
     }
 
 
@@ -41,9 +48,14 @@ public class VirtualMachineViewModelFactory implements ViewModelProvider.Factory
             ConnectHostUseCase connectHostUseCase = new ConnectHostUseCase(hostRepository, repository);
             DisconnectHostUseCase disconnectHostUseCase = new DisconnectHostUseCase(repository);
             ListVMsUseCase listUseCase = new ListVMsUseCase(repository);
+            PowerVMUseCase startUseCase = new PowerVMUseCase(repository, checkVMStateUseCase);
+            RebootVMUseCase rebootUseCase = new RebootVMUseCase(repository, checkVMStateUseCase);
+
             return (T) new VirtualMachineListViewModel(connectHostUseCase,
                                                         disconnectHostUseCase,
-                                                        listUseCase);
+                                                        listUseCase,
+                                                        startUseCase,
+                                                        rebootUseCase);
         }
 
         throw new IllegalArgumentException("Unknown ViewModel class");

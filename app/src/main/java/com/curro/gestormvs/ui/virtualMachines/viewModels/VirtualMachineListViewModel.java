@@ -9,6 +9,8 @@ import com.curro.gestormvs.domain.models.VirtualMachine;
 import com.curro.gestormvs.domain.useCases.ConnectHostUseCase;
 import com.curro.gestormvs.domain.useCases.DisconnectHostUseCase;
 import com.curro.gestormvs.domain.useCases.ListVMsUseCase;
+import com.curro.gestormvs.domain.useCases.PowerVMUseCase;
+import com.curro.gestormvs.domain.useCases.RebootVMUseCase;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -19,9 +21,12 @@ public class VirtualMachineListViewModel extends ViewModel {
     private final ConnectHostUseCase connectHostUseCase;
     private final DisconnectHostUseCase disconnectHostUseCase;
     private final ListVMsUseCase listMVsUseCase;
+    private final PowerVMUseCase powerVMUseCase;
+    private final RebootVMUseCase rebootVMUseCase;
     private final MutableLiveData<Host> hostLiveData;
     private final MutableLiveData<List<VirtualMachine>> vmsLiveData;
     private final MutableLiveData<Boolean> loadingLiveData;
+    private final MutableLiveData<String> messageLiveData;
     private final MutableLiveData<String> errorLiveData;
 
 
@@ -30,14 +35,19 @@ public class VirtualMachineListViewModel extends ViewModel {
 
     public VirtualMachineListViewModel(ConnectHostUseCase connectUseCase,
                                        DisconnectHostUseCase disconnectHostUseCase,
-                                       ListVMsUseCase listUseCase) {
+                                       ListVMsUseCase listUseCase,
+                                       PowerVMUseCase powerVMUseCase,
+                                       RebootVMUseCase rebootVMUseCase) {
         this.connectHostUseCase = connectUseCase;
         this.disconnectHostUseCase = disconnectHostUseCase;
         this.listMVsUseCase = listUseCase;
+        this.powerVMUseCase = powerVMUseCase;
+        this.rebootVMUseCase = rebootVMUseCase;
 
         this.hostLiveData = new MutableLiveData<>();
         this.vmsLiveData = new MutableLiveData<>();
         this.loadingLiveData = new MutableLiveData<>();
+        this.messageLiveData = new MutableLiveData<>();
         this.errorLiveData = new MutableLiveData<>();
     }
 
@@ -52,6 +62,8 @@ public class VirtualMachineListViewModel extends ViewModel {
     public LiveData<Host> getHostData() { return hostLiveData; }
 
     public LiveData<List<VirtualMachine>> getVms()  { return vmsLiveData; }
+
+    public LiveData<String> getMessage() { return messageLiveData; }
 
     public LiveData<String> getError() {
         return errorLiveData;
@@ -93,6 +105,44 @@ public class VirtualMachineListViewModel extends ViewModel {
                 disconnectHostUseCase.execute();
             } catch (Exception e) {
                 errorLiveData.postValue(e.getMessage());
+            }
+        });
+    }
+
+    public void powerVM(VirtualMachine vm) {
+        executorService.execute(() -> {
+            try {
+                loadingLiveData.postValue(true);
+                boolean isStarting = vm.getState().trim().equalsIgnoreCase("shut off");
+
+                powerVMUseCase.execute(vm);
+
+                List<VirtualMachine> vms = listMVsUseCase.execute();
+                vmsLiveData.postValue(vms);
+
+                if (isStarting) {
+                    messageLiveData.postValue("Virtual machine started");
+                } else {
+                    messageLiveData.postValue("Virtual machine stopped");
+                }
+            } catch (Exception e) {
+                errorLiveData.postValue(e.getMessage());
+            } finally {
+                loadingLiveData.postValue(false);
+            }
+        });
+    }
+
+    public void rebootVM(VirtualMachine vm) {
+        executorService.execute(() -> {
+            try {
+                loadingLiveData.postValue(true);
+
+                rebootVMUseCase.execute(vm);
+            } catch (Exception e) {
+                errorLiveData.postValue(e.getMessage());
+            } finally {
+                loadingLiveData.postValue(false);
             }
         });
     }
