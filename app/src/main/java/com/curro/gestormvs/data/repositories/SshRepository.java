@@ -224,6 +224,14 @@ public class SshRepository {
         executeVMOperation("destroy", vm);
     }
 
+    public void pauseVM(VirtualMachine vm) {
+        executeVMOperation("suspend", vm);
+    }
+
+    public void resumeVM(VirtualMachine vm) {
+        executeVMOperation("resume", vm);
+    }
+
 
     // Specific methods for hibernation
     @SuppressWarnings("BusyWait")
