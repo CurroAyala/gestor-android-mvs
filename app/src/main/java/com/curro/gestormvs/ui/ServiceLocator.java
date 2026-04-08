@@ -6,11 +6,15 @@ import com.curro.gestormvs.data.daos.HostDao;
 import com.curro.gestormvs.data.db.AppDatabase;
 import com.curro.gestormvs.data.repositories.HostRepository;
 import com.curro.gestormvs.data.repositories.SshRepository;
+import com.curro.gestormvs.domain.useCases.CheckVMStateUseCase;
 
 public class ServiceLocator {
 
     private static HostRepository hostRepository;
     private static SshRepository sshRepository;
+
+    private static CheckVMStateUseCase checkVMStateUseCase;
+
 
     public static HostRepository provideHostRepository(Context context) {
         if (hostRepository == null) {
@@ -25,6 +29,13 @@ public class ServiceLocator {
             sshRepository = new SshRepository();
         }
         return sshRepository;
+    }
+
+    public static CheckVMStateUseCase provideCheckVMStateUseCase() {
+        if (checkVMStateUseCase == null) {
+            checkVMStateUseCase = new CheckVMStateUseCase(provideSshRepository());
+        }
+        return checkVMStateUseCase;
     }
 
 }
