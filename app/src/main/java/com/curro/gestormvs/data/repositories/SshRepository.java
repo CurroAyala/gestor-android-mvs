@@ -59,6 +59,47 @@ public class SshRepository {
     }
 
 
+    // Aux method
+    @SuppressWarnings("BusyWait")
+    public void executeVMOperation(String action, VirtualMachine vm) {
+
+        String command = "virsh --connect qemu:///system " + action + " " + vm.getName();
+        Channel channel = null;
+
+        try {
+            // Open execution channel
+            channel = session.openChannel("exec");
+            ((ChannelExec) channel).setCommand(command);
+            channel.connect();
+
+            // Waiting for the status code
+            // JSch doesn't support event listeners. Active waiting is required
+            while (!channel.isClosed()) {
+                Thread.sleep(100);
+            }
+
+            // Read the status code when the channel is closed
+            int statusCode = channel.getExitStatus();
+            if (statusCode == 126) {
+                throw new RuntimeException("Access denied to virtual machine");
+            } else if (statusCode != 0) {
+                throw new RuntimeException("Error executing " + action + " on virtual machine");
+            }
+
+        } catch (JSchException e) {
+            throw new RuntimeException("Error creating channel");
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Error waiting. It was interrupted");
+        } finally {
+            if (channel != null && channel.isConnected()) {
+                channel.disconnect();
+            }
+        }
+
+    }
+
+
     // Basic virsh commands
     public List<VirtualMachine> getAllVMs() {
 
@@ -81,13 +122,13 @@ public class SshRepository {
                 while ((line = reader.readLine()) != null) {
                     rawOutput.append(line).append("\n");
                 }
-                // Reemplaza la línea del Log.d por esto
+
+                // Log de output for debugging
                 String output = rawOutput.toString();
                 int chunkSize = 3000;
                 for (int i = 0; i < output.length(); i += chunkSize) {
                     Log.d("SshRepository", output.substring(i, Math.min(i + chunkSize, output.length())));
                 }
-
 
                 BufferedReader readerForParser = new BufferedReader(
                         new java.io.StringReader(rawOutput.toString())
@@ -106,5 +147,16 @@ public class SshRepository {
         }
 
     }
+
+
+    public void startVM(VirtualMachine vm) {
+        executeVMOperation("start", vm);
+    }
+
+
+    public void shutdownVM(VirtualMachine vm) {
+        executeVMOperation("shutdown", vm);
+    }
+
 
 }
