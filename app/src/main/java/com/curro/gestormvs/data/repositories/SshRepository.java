@@ -59,7 +59,7 @@ public class SshRepository {
     }
 
 
-    // Aux method
+    // Aux methods
     @SuppressWarnings("BusyWait")
     public void executeVMOperation(String action, VirtualMachine vm) {
 
@@ -121,6 +121,43 @@ public class SshRepository {
                 channel.disconnect();
             }
         }
+
+    }
+
+    public boolean checkSaveFile(String vmName) {
+
+        String command = "[ -f /var/lib/libvirt/qemu/save/"+vmName+".save ] && echo true || echo false";
+        Channel channel = null;
+
+        boolean res = false;
+
+        try {
+            // Open execution channel
+            channel = session.openChannel("exec");
+            ((ChannelExec) channel).setCommand(command);
+            channel.connect();
+
+            // Reading the response
+            try (InputStream in = channel.getInputStream()) {
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+                String output = reader.readLine();
+
+                res = output != null && output.equalsIgnoreCase("true");
+            } catch (IOException e) {
+                throw new RuntimeException("Error reading response");
+            }
+
+        } catch (JSchException e) {
+            throw new RuntimeException("Error creating channel");
+        } finally {
+            if (channel != null && channel.isConnected()) {
+                channel.disconnect();
+            }
+        }
+
+        return res;
 
     }
 
@@ -186,6 +223,138 @@ public class SshRepository {
     public void forceShutdownVM(VirtualMachine vm) {
         executeVMOperation("destroy", vm);
     }
+
+
+    // Specific methods for hibernation
+    @SuppressWarnings("BusyWait")
+    public void hibernateVM(VirtualMachine vm) {
+
+        String command = "virsh --connect qemu:///system save " + vm.getName() + " /var/lib/libvirt/qemu/save/"+vm.getName()+".save";
+        Channel channel = null;
+        InputStream errStream;
+
+        try {
+            // Open execution channel
+            channel = session.openChannel("exec");
+            ((ChannelExec) channel).setCommand(command);
+            try {
+                errStream = ((ChannelExec) channel).getErrStream();
+            } catch (IOException e) {
+                throw new RuntimeException("Error getting error message");
+            }
+
+            channel.connect();
+
+            // Waiting for the status code
+            // JSch doesn't support event listeners. Active waiting is required
+            while (!channel.isClosed()) {
+                Thread.sleep(100);
+            }
+
+            // Read the status code when the channel is closed
+            int statusCode = channel.getExitStatus();
+            if (statusCode != 0) {
+                // Read the response
+                try {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(errStream));
+
+                    StringBuilder rawOutput = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        rawOutput.append(line).append("\n");
+                    }
+
+                    String output = rawOutput.toString();
+
+                    if (output.contains("Permission denied") || output.contains("Access denied")) {
+                        throw new RuntimeException("Access denied to virtual machine");
+                    } else {
+                        throw new RuntimeException("Error executing hibernation on virtual machine");
+                    }
+
+                } catch (IOException e) {
+                    throw new RuntimeException("Error reading response");
+                }
+            }
+
+        } catch (JSchException e) {
+            throw new RuntimeException("Error creating channel");
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Error waiting. It was interrupted");
+        } finally {
+            if (channel != null && channel.isConnected()) {
+                channel.disconnect();
+            }
+        }
+
+    }
+
+    @SuppressWarnings("BusyWait")
+    public void restoreVM(VirtualMachine vm) {
+
+        String command = "virsh --connect qemu:///system restore /var/lib/libvirt/qemu/save/"+vm.getName()+".save";
+        Channel channel = null;
+        InputStream errStream;
+
+        try {
+            // Open execution channel
+            channel = session.openChannel("exec");
+            ((ChannelExec) channel).setCommand(command);
+            try {
+                errStream = ((ChannelExec) channel).getErrStream();
+            } catch (IOException e) {
+                throw new RuntimeException("Error getting error message");
+            }
+
+            channel.connect();
+
+            // Waiting for the status code
+            // JSch doesn't support event listeners. Active waiting is required
+            while (!channel.isClosed()) {
+                Thread.sleep(100);
+            }
+
+            // Read the status code when the channel is closed
+            int statusCode = channel.getExitStatus();
+            if (statusCode != 0) {
+                // Read the response
+                try {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(errStream));
+
+                    StringBuilder rawOutput = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        rawOutput.append(line).append("\n");
+                    }
+
+                    String output = rawOutput.toString();
+
+                    if (output.contains("Permission denied") || output.contains("Access denied")) {
+                        throw new RuntimeException("Access denied to virtual machine");
+                    } else {
+                        throw new RuntimeException("Error executing hibernation on virtual machine");
+                    }
+
+                } catch (IOException e) {
+                    throw new RuntimeException("Error reading response");
+                }
+            }
+
+        } catch (JSchException e) {
+            throw new RuntimeException("Error creating channel");
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Error waiting. It was interrupted");
+        } finally {
+            if (channel != null && channel.isConnected()) {
+                channel.disconnect();
+            }
+        }
+
+    }
+
+
 
 
 }
