@@ -65,11 +65,18 @@ public class SshRepository {
 
         String command = "virsh --connect qemu:///system " + action + " " + vm.getName();
         Channel channel = null;
+        InputStream errStream;
 
         try {
             // Open execution channel
             channel = session.openChannel("exec");
             ((ChannelExec) channel).setCommand(command);
+            try {
+                errStream = ((ChannelExec) channel).getErrStream();
+            } catch (IOException e) {
+                throw new RuntimeException("Error getting error message");
+            }
+
             channel.connect();
 
             // Waiting for the status code
@@ -80,10 +87,28 @@ public class SshRepository {
 
             // Read the status code when the channel is closed
             int statusCode = channel.getExitStatus();
-            if (statusCode == 126) {
-                throw new RuntimeException("Access denied to virtual machine");
-            } else if (statusCode != 0) {
-                throw new RuntimeException("Error executing " + action + " on virtual machine");
+            if (statusCode != 0) {
+                // Read the response
+                try {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(errStream));
+
+                    StringBuilder rawOutput = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        rawOutput.append(line).append("\n");
+                    }
+
+                    String output = rawOutput.toString();
+
+                    if (output.contains("Permission denied") || output.contains("Access denied")) {
+                        throw new RuntimeException("Access denied to virtual machine");
+                    } else {
+                        throw new RuntimeException("Error executing " + action + " on virtual machine");
+                    }
+
+                } catch (IOException e) {
+                    throw new RuntimeException("Error reading response");
+                }
             }
 
         } catch (JSchException e) {
@@ -156,6 +181,10 @@ public class SshRepository {
 
     public void shutdownVM(VirtualMachine vm) {
         executeVMOperation("shutdown", vm);
+    }
+
+    public void forceShutdownVM(VirtualMachine vm) {
+        executeVMOperation("destroy", vm);
     }
 
 
