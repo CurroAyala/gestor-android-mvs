@@ -112,6 +112,9 @@ public class VirtualMachineListFragment extends Fragment {
 
             @Override
             public void onHibernate(VirtualMachine vm) { viewModel.hibernate(vm); }
+
+            @Override
+            public void onPause(VirtualMachine vm) { viewModel.pauseVM(vm); }
         });
 
         binding.recyclerVms.setLayoutManager(new LinearLayoutManager(requireContext()));

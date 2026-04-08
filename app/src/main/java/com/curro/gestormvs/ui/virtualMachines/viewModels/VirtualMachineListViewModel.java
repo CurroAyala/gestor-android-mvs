@@ -10,6 +10,7 @@ import com.curro.gestormvs.domain.useCases.ConnectHostUseCase;
 import com.curro.gestormvs.domain.useCases.DisconnectHostUseCase;
 import com.curro.gestormvs.domain.useCases.HibernateVMUseCase;
 import com.curro.gestormvs.domain.useCases.ListVMsUseCase;
+import com.curro.gestormvs.domain.useCases.PauseVMUseCase;
 import com.curro.gestormvs.domain.useCases.PowerVMUseCase;
 import com.curro.gestormvs.domain.useCases.RebootVMUseCase;
 
@@ -25,6 +26,7 @@ public class VirtualMachineListViewModel extends ViewModel {
     private final PowerVMUseCase powerVMUseCase;
     private final RebootVMUseCase rebootVMUseCase;
     private final HibernateVMUseCase hibernateVMUseCase;
+    private final PauseVMUseCase pauseVMUseCase;
 
     private final MutableLiveData<Host> hostLiveData;
     private final MutableLiveData<List<VirtualMachine>> vmsLiveData;
@@ -41,13 +43,15 @@ public class VirtualMachineListViewModel extends ViewModel {
                                        ListVMsUseCase listUseCase,
                                        PowerVMUseCase powerVMUseCase,
                                        RebootVMUseCase rebootVMUseCase,
-                                       HibernateVMUseCase hibernateVMUseCase) {
+                                       HibernateVMUseCase hibernateVMUseCase,
+                                       PauseVMUseCase pauseVMUseCase) {
         this.connectHostUseCase = connectUseCase;
         this.disconnectHostUseCase = disconnectHostUseCase;
         this.listMVsUseCase = listUseCase;
         this.powerVMUseCase = powerVMUseCase;
         this.rebootVMUseCase = rebootVMUseCase;
         this.hibernateVMUseCase = hibernateVMUseCase;
+        this.pauseVMUseCase = pauseVMUseCase;
 
         this.hostLiveData = new MutableLiveData<>();
         this.vmsLiveData = new MutableLiveData<>();
@@ -172,6 +176,31 @@ public class VirtualMachineListViewModel extends ViewModel {
                     messageLiveData.postValue("Virtual machine hibernated");
                 } else {
                     messageLiveData.postValue("Virtual machine restored");
+                }
+
+            } catch (Exception e) {
+                errorLiveData.postValue(e.getMessage());
+            } finally {
+                loadingLiveData.postValue(false);
+            }
+        });
+    }
+
+    public void pauseVM(VirtualMachine vm) {
+        executorService.execute(() -> {
+            try {
+                loadingLiveData.postValue(true);
+                boolean isPausing = vm.getState().trim().equalsIgnoreCase("running");
+
+                pauseVMUseCase.execute(vm);
+
+                List<VirtualMachine> vms = listMVsUseCase.execute();
+                vmsLiveData.postValue(vms);
+
+                if(isPausing) {
+                    messageLiveData.postValue("Virtual machine paused");
+                } else {
+                    messageLiveData.postValue("Virtual machine resumed");
                 }
 
             } catch (Exception e) {

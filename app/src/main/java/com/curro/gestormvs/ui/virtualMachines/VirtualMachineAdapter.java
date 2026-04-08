@@ -22,6 +22,7 @@ public class VirtualMachineAdapter extends RecyclerView.Adapter<VirtualMachineAd
         void onPower(VirtualMachine vm);
         void onReboot(VirtualMachine vm);
         void onHibernate(VirtualMachine vm);
+        void onPause(VirtualMachine vm);
     }
 
     private List<VirtualMachine> vms = new ArrayList<>();
@@ -74,6 +75,7 @@ public class VirtualMachineAdapter extends RecyclerView.Adapter<VirtualMachineAd
             binding.btnPower.setOnClickListener(v -> listener.onPower(vm));
             binding.btnRestart.setOnClickListener(v -> listener.onReboot(vm));
             binding.btnSleep.setOnClickListener(v -> listener.onHibernate(vm));
+            binding.btnPause.setOnClickListener(v -> listener.onPause(vm));
         }
 
         // Aux methods -------------------------
