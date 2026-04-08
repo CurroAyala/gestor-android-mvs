@@ -20,7 +20,8 @@ public class VirtualMachineAdapter extends RecyclerView.Adapter<VirtualMachineAd
 
     public interface OnVirtualMachineActionListener {
         void onPower(VirtualMachine vm);
-        void onRestart(VirtualMachine vm);
+        void onReboot(VirtualMachine vm);
+        void onHibernate(VirtualMachine vm);
     }
 
     private List<VirtualMachine> vms = new ArrayList<>();
@@ -71,7 +72,8 @@ public class VirtualMachineAdapter extends RecyclerView.Adapter<VirtualMachineAd
             updateButtons(vm.getState());
 
             binding.btnPower.setOnClickListener(v -> listener.onPower(vm));
-            binding.btnRestart.setOnClickListener(v -> listener.onRestart(vm));
+            binding.btnRestart.setOnClickListener(v -> listener.onReboot(vm));
+            binding.btnSleep.setOnClickListener(v -> listener.onHibernate(vm));
         }
 
         // Aux methods -------------------------
@@ -109,15 +111,18 @@ public class VirtualMachineAdapter extends RecyclerView.Adapter<VirtualMachineAd
                 case "running":
                     binding.btnPause.setImageResource(R.drawable.ic_pause);
                     binding.btnSleep.setImageResource(R.drawable.ic_sleep);
+                    break;
 
                 case "paused":
                     binding.btnPause.setImageResource(R.drawable.ic_play);
                     binding.btnSleep.setImageResource(R.drawable.ic_sleep);
+                    break;
 
                 case "shut off":
                 default:
                     binding.btnPause.setImageResource(R.drawable.ic_pause);
                     binding.btnSleep.setImageResource(R.drawable.ic_restore);
+                    break;
             }
         }
 

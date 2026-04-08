@@ -8,6 +8,7 @@ import com.curro.gestormvs.domain.models.Host;
 import com.curro.gestormvs.domain.models.VirtualMachine;
 import com.curro.gestormvs.domain.useCases.ConnectHostUseCase;
 import com.curro.gestormvs.domain.useCases.DisconnectHostUseCase;
+import com.curro.gestormvs.domain.useCases.HibernateVMUseCase;
 import com.curro.gestormvs.domain.useCases.ListVMsUseCase;
 import com.curro.gestormvs.domain.useCases.PowerVMUseCase;
 import com.curro.gestormvs.domain.useCases.RebootVMUseCase;
@@ -23,6 +24,8 @@ public class VirtualMachineListViewModel extends ViewModel {
     private final ListVMsUseCase listMVsUseCase;
     private final PowerVMUseCase powerVMUseCase;
     private final RebootVMUseCase rebootVMUseCase;
+    private final HibernateVMUseCase hibernateVMUseCase;
+
     private final MutableLiveData<Host> hostLiveData;
     private final MutableLiveData<List<VirtualMachine>> vmsLiveData;
     private final MutableLiveData<Boolean> loadingLiveData;
@@ -37,12 +40,14 @@ public class VirtualMachineListViewModel extends ViewModel {
                                        DisconnectHostUseCase disconnectHostUseCase,
                                        ListVMsUseCase listUseCase,
                                        PowerVMUseCase powerVMUseCase,
-                                       RebootVMUseCase rebootVMUseCase) {
+                                       RebootVMUseCase rebootVMUseCase,
+                                       HibernateVMUseCase hibernateVMUseCase) {
         this.connectHostUseCase = connectUseCase;
         this.disconnectHostUseCase = disconnectHostUseCase;
         this.listMVsUseCase = listUseCase;
         this.powerVMUseCase = powerVMUseCase;
         this.rebootVMUseCase = rebootVMUseCase;
+        this.hibernateVMUseCase = hibernateVMUseCase;
 
         this.hostLiveData = new MutableLiveData<>();
         this.vmsLiveData = new MutableLiveData<>();
@@ -140,7 +145,35 @@ public class VirtualMachineListViewModel extends ViewModel {
 
                 rebootVMUseCase.execute(vm);
 
+                List<VirtualMachine> vms = listMVsUseCase.execute();
+                vmsLiveData.postValue(vms);
+
                 messageLiveData.postValue("Virtual machine rebooted");
+            } catch (Exception e) {
+                errorLiveData.postValue(e.getMessage());
+            } finally {
+                loadingLiveData.postValue(false);
+            }
+        });
+    }
+
+    public void hibernate(VirtualMachine vm) {
+        executorService.execute(() -> {
+            try {
+                loadingLiveData.postValue(true);
+                boolean isHibernating = vm.getState().trim().equalsIgnoreCase("running");
+
+                hibernateVMUseCase.execute(vm);
+
+                List<VirtualMachine> vms = listMVsUseCase.execute();
+                vmsLiveData.postValue(vms);
+
+                if (isHibernating) {
+                    messageLiveData.postValue("Virtual machine hibernated");
+                } else {
+                    messageLiveData.postValue("Virtual machine restored");
+                }
+
             } catch (Exception e) {
                 errorLiveData.postValue(e.getMessage());
             } finally {
