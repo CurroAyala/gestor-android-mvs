@@ -1,5 +1,6 @@
 package com.curro.gestormvs.ui.virtualMachines;
 
+import android.app.Service;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.curro.gestormvs.databinding.FragmentVirtualMachineListBinding;
 import com.curro.gestormvs.domain.models.Host;
+import com.curro.gestormvs.domain.models.VirtualMachine;
 import com.curro.gestormvs.ui.ServiceLocator;
 import com.curro.gestormvs.ui.virtualMachines.viewModels.VirtualMachineListViewModel;
 import com.curro.gestormvs.ui.virtualMachines.viewModels.VirtualMachineViewModelFactory;
@@ -53,7 +55,8 @@ public class VirtualMachineListFragment extends Fragment {
     private void setupViewModel(long hostId) {
         VirtualMachineViewModelFactory factory = new VirtualMachineViewModelFactory(
                 ServiceLocator.provideHostRepository(requireContext()),
-                ServiceLocator.provideSshRepository()
+                ServiceLocator.provideSshRepository(),
+                ServiceLocator.provideCheckVMStateUseCase()
         );
         viewModel = new ViewModelProvider(this, factory).get(VirtualMachineListViewModel.class);
 
@@ -81,10 +84,15 @@ public class VirtualMachineListFragment extends Fragment {
             binding.progressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
         });
 
+        viewModel.getMessage().observe(getViewLifecycleOwner(), message -> {
+            if (message == null) return;
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        });
+
         viewModel.getError().observe(getViewLifecycleOwner(), error -> {
             if (error == null) return;
             Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
-            Navigation.findNavController(requireView()).navigateUp();
+            // Navigation.findNavController(requireView()).navigateUp();
         });
 
         viewModel.loadHost(hostId);
@@ -92,7 +100,15 @@ public class VirtualMachineListFragment extends Fragment {
 
     private void setupRecyclerView() {
         adapter = new VirtualMachineAdapter(new VirtualMachineAdapter.OnVirtualMachineActionListener() {
-         // TODO: virtual machine actions
+            @Override
+            public void onPower(VirtualMachine vm) {
+                viewModel.powerVM(vm);
+            }
+
+            @Override
+            public void onRestart(VirtualMachine vm) {
+                viewModel.rebootVM(vm);
+            }
         });
 
         binding.recyclerVms.setLayoutManager(new LinearLayoutManager(requireContext()));

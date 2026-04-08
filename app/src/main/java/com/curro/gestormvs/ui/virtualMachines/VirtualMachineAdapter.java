@@ -19,9 +19,9 @@ import java.util.List;
 public class VirtualMachineAdapter extends RecyclerView.Adapter<VirtualMachineAdapter.VirtualMachineViewHolder> {
 
     public interface OnVirtualMachineActionListener {
-        // TODO: void onViewSnapshots(VirtualMachine vm);
+        void onPower(VirtualMachine vm);
+        void onRestart(VirtualMachine vm);
     }
-
 
     private List<VirtualMachine> vms = new ArrayList<>();
     private final OnVirtualMachineActionListener listener;
@@ -54,7 +54,7 @@ public class VirtualMachineAdapter extends RecyclerView.Adapter<VirtualMachineAd
         return vms.size();
     }
 
-    public static class VirtualMachineViewHolder extends RecyclerView.ViewHolder {
+    public class VirtualMachineViewHolder extends RecyclerView.ViewHolder {
 
         private final ItemVmBinding binding;
 
@@ -69,7 +69,8 @@ public class VirtualMachineAdapter extends RecyclerView.Adapter<VirtualMachineAd
             binding.tvVmState.setText(vm.getState());
             applyStatusStyle(vm.getState());
 
-            // TODO: binding buttons
+            binding.btnPower.setOnClickListener(v -> listener.onPower(vm));
+            binding.btnRestart.setOnClickListener(v -> listener.onRestart(vm));
         }
 
         // Aux method -------------------------
