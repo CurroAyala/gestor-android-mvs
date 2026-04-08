@@ -30,9 +30,9 @@ public class RebootVMUseCase {
         boolean isDown = checkVMStateUseCase.execute(vm.getName(), "shut off");
         if (!isDown) {
             sshRepository.forceShutdownVM(vm);
-            boolean idNowDown = checkVMStateUseCase.execute(vm.getName(), "shut off");
+            isDown = checkVMStateUseCase.execute(vm.getName(), "shut off");
 
-            if(!idNowDown) {
+            if(!isDown) {
                 throw new RuntimeException("Error shutting down. " +
                         "It took too long.");
             }
