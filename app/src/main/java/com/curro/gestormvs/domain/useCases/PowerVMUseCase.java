@@ -29,8 +29,13 @@ public class PowerVMUseCase {
 
                 boolean result = checkVMStateUseCase.execute(vm.getName(), "shut off");
                 if (!result) {
-                    throw new RuntimeException("Error shutting down virtual machine." +
-                            "It may be still starting or already turned off");
+                    sshRepository.forceShutdownVM(vm);
+                    result = checkVMStateUseCase.execute(vm.getName(), "shut off");
+
+                    if (!result) {
+                        throw new RuntimeException("Error shutting down virtual machine." +
+                                "It may be still starting or already turned off");
+                    }
                 }
                 break;
             case "shut off":
