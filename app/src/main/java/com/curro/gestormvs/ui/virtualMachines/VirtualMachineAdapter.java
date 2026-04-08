@@ -68,12 +68,13 @@ public class VirtualMachineAdapter extends RecyclerView.Adapter<VirtualMachineAd
             binding.tvVmName.setText(vm.getName());
             binding.tvVmState.setText(vm.getState());
             applyStatusStyle(vm.getState());
+            updateButtons(vm.getState());
 
             binding.btnPower.setOnClickListener(v -> listener.onPower(vm));
             binding.btnRestart.setOnClickListener(v -> listener.onRestart(vm));
         }
 
-        // Aux method -------------------------
+        // Aux methods -------------------------
         private void applyStatusStyle(String status) {
             Context ctx = binding.getRoot().getContext();
 
@@ -101,6 +102,23 @@ public class VirtualMachineAdapter extends RecyclerView.Adapter<VirtualMachineAd
 
             binding.tvVmState.setBackgroundTintList(ColorStateList.valueOf(bgColor));
             binding.tvVmState.setTextColor(textColor);
+        }
+
+        private void updateButtons(String state) {
+            switch (state.trim().toLowerCase()) {
+                case "running":
+                    binding.btnPause.setImageResource(R.drawable.ic_pause);
+                    binding.btnSleep.setImageResource(R.drawable.ic_sleep);
+
+                case "paused":
+                    binding.btnPause.setImageResource(R.drawable.ic_play);
+                    binding.btnSleep.setImageResource(R.drawable.ic_sleep);
+
+                case "shut off":
+                default:
+                    binding.btnPause.setImageResource(R.drawable.ic_pause);
+                    binding.btnSleep.setImageResource(R.drawable.ic_restore);
+            }
         }
 
     }
