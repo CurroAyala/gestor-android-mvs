@@ -139,6 +139,8 @@ public class VirtualMachineListViewModel extends ViewModel {
                 loadingLiveData.postValue(true);
 
                 rebootVMUseCase.execute(vm);
+
+                messageLiveData.postValue("Virtual machine rebooted");
             } catch (Exception e) {
                 errorLiveData.postValue(e.getMessage());
             } finally {
