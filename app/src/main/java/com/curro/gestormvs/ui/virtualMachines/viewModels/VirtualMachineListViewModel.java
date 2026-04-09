@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 import com.curro.gestormvs.domain.models.Host;
 import com.curro.gestormvs.domain.models.VirtualMachine;
 import com.curro.gestormvs.domain.useCases.ConnectHostUseCase;
+import com.curro.gestormvs.domain.useCases.CreateSnapshotUseCase;
 import com.curro.gestormvs.domain.useCases.DisconnectHostUseCase;
 import com.curro.gestormvs.domain.useCases.HibernateVMUseCase;
 import com.curro.gestormvs.domain.useCases.ListVMsUseCase;
@@ -27,6 +28,7 @@ public class VirtualMachineListViewModel extends ViewModel {
     private final RebootVMUseCase rebootVMUseCase;
     private final HibernateVMUseCase hibernateVMUseCase;
     private final PauseVMUseCase pauseVMUseCase;
+    private final CreateSnapshotUseCase createSnapshotUseCase;
 
     private final MutableLiveData<Host> hostLiveData;
     private final MutableLiveData<List<VirtualMachine>> vmsLiveData;
@@ -44,7 +46,8 @@ public class VirtualMachineListViewModel extends ViewModel {
                                        PowerVMUseCase powerVMUseCase,
                                        RebootVMUseCase rebootVMUseCase,
                                        HibernateVMUseCase hibernateVMUseCase,
-                                       PauseVMUseCase pauseVMUseCase) {
+                                       PauseVMUseCase pauseVMUseCase,
+                                       CreateSnapshotUseCase createSnapshotUseCase) {
         this.connectHostUseCase = connectUseCase;
         this.disconnectHostUseCase = disconnectHostUseCase;
         this.listMVsUseCase = listUseCase;
@@ -52,6 +55,7 @@ public class VirtualMachineListViewModel extends ViewModel {
         this.rebootVMUseCase = rebootVMUseCase;
         this.hibernateVMUseCase = hibernateVMUseCase;
         this.pauseVMUseCase = pauseVMUseCase;
+        this.createSnapshotUseCase = createSnapshotUseCase;
 
         this.hostLiveData = new MutableLiveData<>();
         this.vmsLiveData = new MutableLiveData<>();
@@ -203,6 +207,22 @@ public class VirtualMachineListViewModel extends ViewModel {
                     messageLiveData.postValue("Virtual machine resumed");
                 }
 
+            } catch (Exception e) {
+                errorLiveData.postValue(e.getMessage());
+            } finally {
+                loadingLiveData.postValue(false);
+            }
+        });
+    }
+
+    public void createSnapshot(VirtualMachine vm, String snapshotName) {
+        executorService.execute(() -> {
+            try {
+                loadingLiveData.postValue(true);
+
+                createSnapshotUseCase.execute(vm, snapshotName);
+
+                messageLiveData.postValue("Snapshot successfully done");
             } catch (Exception e) {
                 errorLiveData.postValue(e.getMessage());
             } finally {

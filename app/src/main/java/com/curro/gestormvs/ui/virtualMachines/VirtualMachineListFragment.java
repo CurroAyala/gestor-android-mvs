@@ -115,6 +115,9 @@ public class VirtualMachineListFragment extends Fragment {
 
             @Override
             public void onPause(VirtualMachine vm) { viewModel.pauseVM(vm); }
+
+            @Override
+            public void onCreateSnapshot(VirtualMachine vm) { showSnapshotDialog(vm); }
         });
 
         binding.recyclerVms.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -138,6 +141,24 @@ public class VirtualMachineListFragment extends Fragment {
         });
 
         dialog.show(getChildFragmentManager(), "password_dialog");
+    }
+
+    private void showSnapshotDialog(VirtualMachine vm) {
+        SnapshotNameDialogFragment dialog = SnapshotNameDialogFragment.newInstance(vm.getName());
+
+        dialog.setOnNameSubmitListener(new SnapshotNameDialogFragment.OnNameSubmitListener() {
+            @Override
+            public void onNameSubmitted(String snapshotName) {
+                viewModel.createSnapshot(vm, snapshotName);
+            }
+
+            @Override
+            public void onCancelled() {
+                // Nothing to do here
+            }
+        });
+
+        dialog.show(getChildFragmentManager(), "snapshot_dialog");
     }
 
     @Override
