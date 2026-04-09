@@ -8,6 +8,7 @@ import com.curro.gestormvs.data.repositories.HostRepository;
 import com.curro.gestormvs.data.repositories.SshRepository;
 import com.curro.gestormvs.domain.useCases.CheckVMStateUseCase;
 import com.curro.gestormvs.domain.useCases.ConnectHostUseCase;
+import com.curro.gestormvs.domain.useCases.CreateSnapshotUseCase;
 import com.curro.gestormvs.domain.useCases.DisconnectHostUseCase;
 import com.curro.gestormvs.domain.useCases.HibernateVMUseCase;
 import com.curro.gestormvs.domain.useCases.ListVMsUseCase;
@@ -54,6 +55,7 @@ public class VirtualMachineViewModelFactory implements ViewModelProvider.Factory
             RebootVMUseCase rebootUseCase = new RebootVMUseCase(repository, checkVMStateUseCase);
             HibernateVMUseCase hibernateUseCase = new HibernateVMUseCase(repository);
             PauseVMUseCase pauseUseCase = new PauseVMUseCase(repository);
+            CreateSnapshotUseCase createSnapshotUseCase = new CreateSnapshotUseCase(repository);
 
             return (T) new VirtualMachineListViewModel(connectHostUseCase,
                                                         disconnectHostUseCase,
@@ -61,7 +63,8 @@ public class VirtualMachineViewModelFactory implements ViewModelProvider.Factory
                                                         startUseCase,
                                                         rebootUseCase,
                                                         hibernateUseCase,
-                                                        pauseUseCase);
+                                                        pauseUseCase,
+                                                        createSnapshotUseCase);
         }
 
         throw new IllegalArgumentException("Unknown ViewModel class");
