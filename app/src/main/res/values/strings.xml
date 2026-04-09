@@ -50,6 +50,11 @@
 
     <!--    List VMs screen     -->
     <string name="no_vms_msg">There are no virtual machines.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dialog_snapshot_name_title">Snapshot name</string>
+    <string name="input_snapshot_name">Write the name</string>
+    <string name="create_snapshot_btn">Create</string>
 
 
 </resources>
