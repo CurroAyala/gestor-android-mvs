@@ -63,16 +63,6 @@
                 android:contentDescription="@string/sleep_vm" />
 
             <ImageButton
-                android:id="@+id/btnClone"
-                android:layout_width="0dp"
-                android:layout_height="24dp"
-                android:layout_weight="1"
-                android:src="@drawable/ic_snapshots"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:tint="@color/text_secondary"
-                android:contentDescription="@string/snapshots_vm" />
-
-            <ImageButton
                 android:id="@+id/btnSnapshot"
                 android:layout_width="0dp"
                 android:layout_height="24dp"
@@ -81,6 +71,16 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 app:tint="@color/text_secondary"
                 android:contentDescription="@string/snapshot_vm" />
+
+            <ImageButton
+                android:id="@+id/btnSnapshots"
+                android:layout_width="0dp"
+                android:layout_height="24dp"
+                android:layout_weight="1"
+                android:src="@drawable/ic_snapshots"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="@color/text_secondary"
+                android:contentDescription="@string/snapshots_vm" />
 
         </LinearLayout>
 
