@@ -215,7 +215,6 @@ public class SshRepository {
         executeVMOperation("start", vm);
     }
 
-
     public void shutdownVM(VirtualMachine vm) {
         executeVMOperation("shutdown", vm);
     }
@@ -363,6 +362,72 @@ public class SshRepository {
     }
 
 
+    // Specific methods for snapshots
+    public void createSnapshot(VirtualMachine vm, String snapshotName) {
+
+        String command = "virsh --connect qemu:///system snapshot-create-as " + vm.getName() +
+                " --name " + snapshotName;
+        Channel channel = null;
+        InputStream errStream;
+
+        try {
+            // Open execution channel
+            channel = session.openChannel("exec");
+            ((ChannelExec) channel).setCommand(command);
+            try {
+                errStream = ((ChannelExec) channel).getErrStream();
+            } catch (IOException e) {
+                throw new RuntimeException("Error getting error message");
+            }
+
+            channel.connect();
+
+            // Waiting for the status code
+            // JSch doesn't support event listeners. Active waiting is required
+            while (!channel.isClosed()) {
+                Thread.sleep(100);
+            }
+
+            // Read the status code when the channel is closed
+            int statusCode = channel.getExitStatus();
+            if (statusCode != 0) {
+                // Read the response
+                try {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(errStream));
+
+                    StringBuilder rawOutput = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        rawOutput.append(line).append("\n");
+                    }
+
+                    String output = rawOutput.toString();
+
+                    if (output.contains("Permission denied") || output.contains("Access denied")) {
+                        throw new RuntimeException("Access denied to virtual machine");
+                    } else if (output.contains("already exists")) {
+                        throw new RuntimeException("Snapshot already exists");
+                    } else {
+                        throw new RuntimeException("Error executing creating snapshot");
+                    }
+
+                } catch (IOException e) {
+                    throw new RuntimeException("Error reading response");
+                }
+            }
+
+        } catch (JSchException e) {
+            throw new RuntimeException("Error creating channel");
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Error waiting. It was interrupted");
+        } finally {
+            if (channel != null && channel.isConnected()) {
+                channel.disconnect();
+            }
+        }
+
+    }
 
 
 }
