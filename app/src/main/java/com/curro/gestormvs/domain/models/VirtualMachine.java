@@ -1,6 +1,8 @@
 package com.curro.gestormvs.domain.models;
 
-public class VirtualMachine {
+import java.io.Serializable;
+
+public class VirtualMachine implements Serializable {
 
     private Integer id;
     private String name;
