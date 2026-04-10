@@ -46,6 +46,20 @@
         <argument
             android:name="hostId"
             app:argType="long" />
+
+        <action
+            android:id="@+id/action_virtualMachineListFragment_to_snapshotListFragment"
+            app:destination="@id/snapshotListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/snapshotListFragment"
+        android:name="com.curro.gestormvs.ui.snapshots.SnapshotListFragment"
+        tools:layout="@layout/fragment_snapshot_list">
+
+        <argument
+            android:name="virtualMachine"
+            app:argType="com.curro.gestormvs.domain.models.VirtualMachine" />
     </fragment>
 
 </navigation>
