@@ -56,5 +56,9 @@
     <string name="input_snapshot_name">Write the name</string>
     <string name="create_snapshot_btn">Create</string>
 
+    <!--    List VMs screen     -->
+    <string name="revert_btn_description">Revert snapshot</string>
+    <string name="delete_btn_description">Delete snapshot</string>
+    <string name="no_snapshots_msg">There are no snapshots.</string>
 
 </resources>
