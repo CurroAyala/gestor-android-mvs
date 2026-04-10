@@ -118,6 +118,14 @@ public class VirtualMachineListFragment extends Fragment {
 
             @Override
             public void onCreateSnapshot(VirtualMachine vm) { showSnapshotDialog(vm); }
+
+            @Override
+            public void onListSnapshots(VirtualMachine vm) {
+                VirtualMachineListFragmentDirections.ActionVirtualMachineListFragmentToSnapshotListFragment action =
+                        VirtualMachineListFragmentDirections.actionVirtualMachineListFragmentToSnapshotListFragment(vm);
+
+                Navigation.findNavController(requireView()).navigate(action);
+            }
         });
 
         binding.recyclerVms.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -165,8 +173,15 @@ public class VirtualMachineListFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
 
-        viewModel.disconnect();
+        //viewModel.disconnect();
         binding = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        viewModel.disconnect();
     }
 
 }
