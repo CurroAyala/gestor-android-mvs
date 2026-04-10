@@ -47,6 +47,7 @@ public class SnapshotListFragment extends Fragment {
 
         if (getArguments() != null) {
             currentVm = SnapshotListFragmentArgs.fromBundle(getArguments()).getVirtualMachine();
+            binding.tvVmTitle.setText(currentVm.getName());
         }
 
         setupViewModel(currentVm);
