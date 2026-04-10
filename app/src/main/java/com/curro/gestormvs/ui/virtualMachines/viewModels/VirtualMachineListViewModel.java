@@ -234,6 +234,7 @@ public class VirtualMachineListViewModel extends ViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
+        disconnect();
         executorService.shutdown();
     }
 

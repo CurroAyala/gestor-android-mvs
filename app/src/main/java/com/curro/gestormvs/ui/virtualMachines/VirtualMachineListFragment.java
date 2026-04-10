@@ -177,11 +177,4 @@ public class VirtualMachineListFragment extends Fragment {
         binding = null;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        viewModel.disconnect();
-    }
-
 }
