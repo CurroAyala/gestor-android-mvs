@@ -3,8 +3,10 @@ package com.curro.gestormvs.data.repositories;
 
 import android.util.Log;
 
+import com.curro.gestormvs.data.mappers.SnapshotMapper;
 import com.curro.gestormvs.data.mappers.VirtualMachineMapper;
 import com.curro.gestormvs.domain.models.Host;
+import com.curro.gestormvs.domain.models.Snapshot;
 import com.curro.gestormvs.domain.models.VirtualMachine;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
@@ -159,6 +161,59 @@ public class SshRepository {
 
         return res;
 
+    }
+
+    @SuppressWarnings("BusyWait")
+    public void executeSnapshotOperation(String action, VirtualMachine vm, String snapshotName) {
+        String command = "virsh --connect qemu:///system " + action + " " + vm.getName() + " " + snapshotName;
+        Channel channel = null;
+        InputStream errStream;
+
+        try {
+            // Open execution channel
+            channel = session.openChannel("exec");
+            ((ChannelExec) channel).setCommand(command);
+            errStream = ((ChannelExec) channel).getErrStream();
+            channel.connect();
+
+            // Waiting for the status code
+            // JSch doesn't support event listeners. Active waiting is required
+            while (!channel.isClosed()) {
+                Thread.sleep(100);
+            }
+
+            // Read the status code when the channel is closed
+            int statusCode = channel.getExitStatus();
+            if (statusCode != 0) {
+                // Read the response
+                BufferedReader reader = new BufferedReader(new InputStreamReader(errStream));
+
+                StringBuilder rawOutput = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    rawOutput.append(line).append("\n");
+                }
+
+                String output = rawOutput.toString();
+
+                if (output.contains("Permission denied") || output.contains("Access denied")) {
+                    throw new RuntimeException("Access denied to virtual machine");
+                } else {
+                    throw new RuntimeException("Error executing " + action + " on virtual machine");
+                }
+            }
+        } catch (JSchException e) {
+            throw new RuntimeException("Error creating channel");
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Error waiting. It was interrupted");
+        } catch (IOException e) {
+            throw new RuntimeException("Error reading host response");
+        } finally {
+            if (channel != null && channel.isConnected()) {
+                channel.disconnect();
+            }
+        }
     }
 
 
@@ -427,6 +482,41 @@ public class SshRepository {
             }
         }
 
+    }
+
+    public List<Snapshot> getAllSnapshots(VirtualMachine vm) {
+
+        String command = "virsh --connect qemu:///system snapshot-list " + vm.getName();
+        Channel channel = null;
+
+        try {
+            // Open execution channel
+            channel = session.openChannel("exec");
+            ((ChannelExec) channel).setCommand(command);
+            channel.connect();
+
+            try (InputStream in = channel.getInputStream()) {
+                BufferedReader readerForParser = new BufferedReader(new InputStreamReader(in));
+                return SnapshotMapper.parseOutputToSnapshotsList(readerForParser);
+            } catch (IOException e) {
+                throw new RuntimeException("Error reading response");
+            }
+        } catch (JSchException e) {
+            throw new RuntimeException("Error creating channel");
+        } finally {
+            if (channel != null && channel.isConnected()) {
+                channel.disconnect();
+            }
+        }
+
+    }
+
+    public void reverSnapshot(VirtualMachine vm, Snapshot snapshot) {
+        executeSnapshotOperation("snapshot-revert", vm, snapshot.getName());
+    }
+
+    public void deleteSnapshot(VirtualMachine vm, Snapshot snapshot) {
+        executeSnapshotOperation("snapshot-delete", vm, snapshot.getName());
     }
 
 
