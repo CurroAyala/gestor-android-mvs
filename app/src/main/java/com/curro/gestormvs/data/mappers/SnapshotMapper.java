@@ -36,7 +36,9 @@ public class SnapshotMapper {
             if (columns.length >= 3) {
                 String name = columns[0];
                 String creationTime = columns[1] + " " + columns[2];
-                snapshotList.add(new Snapshot(name, creationTime));
+                String state = columns[columns.length - 1];
+                snapshotList.add(new Snapshot(name, creationTime, state));
+
             }
         }
         return snapshotList;
