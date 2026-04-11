@@ -1,6 +1,7 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
@@ -27,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_primary"
-                android:textSize="16sp"
+                android:textSize="17sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -37,19 +38,34 @@
                 android:layout_marginTop="2dp"
                 android:fontFamily="monospace"
                 android:textColor="@color/text_hint"
-                android:textSize="13sp" />
+                android:textSize="14sp"
+                android:gravity="center_vertical" />
 
-            <TextView
-                android:id="@+id/tvSnapshotDate"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:fontFamily="monospace"
-                android:textColor="@color/text_hint"
-                android:textSize="12sp"
-                app:drawableStartCompat="@drawable/ic_clock"
-                android:drawablePadding="4dp"
-                app:drawableTint="@color/text_hint" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:src="@drawable/ic_clock"
+                    app:tint="@color/text_hint"
+                    android:importantForAccessibility="no" />
+
+                <TextView
+                    android:id="@+id/tvSnapshotDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:fontFamily="monospace"
+                    android:textColor="@color/text_hint"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
