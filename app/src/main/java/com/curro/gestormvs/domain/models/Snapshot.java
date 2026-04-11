@@ -4,10 +4,12 @@ public class Snapshot {
 
     private String name;
     private String description;
+    private String state;
 
-    public Snapshot(String name, String description) {
+    public Snapshot(String name, String description, String state) {
         this.name = name;
         this.description = description;
+        this.state = state;
     }
 
     // Getters and Setters
@@ -26,5 +28,13 @@ public class Snapshot {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }
