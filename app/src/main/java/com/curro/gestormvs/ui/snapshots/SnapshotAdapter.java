@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.curro.gestormvs.R;
 import com.curro.gestormvs.databinding.ItemSnapshotBinding;
 import com.curro.gestormvs.domain.models.Snapshot;
 
@@ -58,6 +59,9 @@ public class SnapshotAdapter extends RecyclerView.Adapter<SnapshotAdapter.Snapsh
         void bind(Snapshot snapshot) {
             binding.tvSnapshotName.setText(snapshot.getName());
             binding.tvSnapshotDate.setText(snapshot.getDescription());
+            binding.tvSnapshotState.setText(itemView.getContext().getString(R.string.state_prefix,
+                    snapshot.getState()));
+
             binding.btnRevert.setOnClickListener(v -> listener.onRevert(snapshot));
             binding.btnDelete.setOnClickListener(v -> listener.onDelete(snapshot));
         }
