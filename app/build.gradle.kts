@@ -44,6 +44,10 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    packaging {
+        resources.excludes += "META-INF/DEPENDENCIES"
+    }
 }
 
 dependencies {
@@ -67,4 +71,8 @@ dependencies {
     testImplementation(libs.mockito)
 
     implementation(libs.jsch)
+
+    androidTestImplementation(libs.sshd.core)
+    androidTestImplementation(libs.espresso.contrib)
+    androidTestImplementation(libs.uiautomator)
 }

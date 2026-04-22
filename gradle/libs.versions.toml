@@ -13,11 +13,14 @@ tink = "1.20.0"
 safeArgs = "2.9.7"
 mockito = "5.23.0"
 jsch = "2.27.9"
+sshd = "2.17.1"
+uiautomator = "2.3.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+espresso-contrib = { group = "androidx.test.espresso", name = "espresso-contrib", version.ref = "espressoCore" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
@@ -30,6 +33,8 @@ navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version
 tink-android = { group = "com.google.crypto.tink", name = "tink-android", version.ref = "tink" }
 mockito = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
 jsch = { group = "com.github.mwiede", name = "jsch", version.ref = "jsch" }
+sshd-core = { group = "org.apache.sshd", name = "sshd-core", version.ref = "sshd" }
+uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
 
 
 [plugins]
