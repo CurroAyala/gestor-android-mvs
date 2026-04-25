@@ -87,12 +87,16 @@ public class VirtualMachineListFragment extends Fragment {
         viewModel.getMessage().observe(getViewLifecycleOwner(), message -> {
             if (message == null) return;
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+
+            viewModel.clearMessage();
         });
 
         viewModel.getError().observe(getViewLifecycleOwner(), error -> {
             if (error == null) return;
             Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
             // Navigation.findNavController(requireView()).navigateUp();
+
+            viewModel.clearError();
         });
 
         viewModel.loadHost(hostId);

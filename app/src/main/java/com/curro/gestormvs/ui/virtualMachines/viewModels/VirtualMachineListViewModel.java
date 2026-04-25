@@ -82,6 +82,11 @@ public class VirtualMachineListViewModel extends ViewModel {
         return errorLiveData;
     }
 
+    public void clearMessage() { messageLiveData.setValue(null); }
+
+    public void clearError() { errorLiveData.setValue(null); }
+
+
     public void loadHost(long hostId) {
         executorService.execute(() -> {
             try {
