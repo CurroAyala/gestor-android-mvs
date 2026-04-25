@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GAMV</string>
+
+    <!-- Bottom menu -->
+    <string name="home_button_title">Inicio</string>
+    <string name="add_host_button_title">Añadir</string>
+    <string name="settings_button_title">Ajustes</string>
+
+    <!-- Host item -->
+    <string name="server_icon">Icono de servidor</string>
+    <string name="edit_host">Editar host</string>
+    <string name="delete_host">Eliminar host</string>
+
+    <!-- Home screen -->
+    <string name="no_hosts_msg">No hay hosts guardados.</string>
+    <string name="tap_to_add">Pulsa en Añadir para crear uno.</string>
+
+    <!-- Add / update screen -->
+    <string name="input_host_name">Nombre del host</string>
+    <string name="host_name_ex">Ej: Servidor del instituto</string>
+    <string name="input_ip">IP del host</string>
+    <string name="ip_ex">192.168.1.X</string>
+    <string name="input_port">Puerto</string>
+    <string name="port_22">22</string>
+    <string name="input_user">Usuario</string>
+    <string name="user_ex">Ej: root</string>
+    <string name="input_password">Contraseña (opcional)</string>
+    <string name="save_btn">Guardar</string>
+
+    <!-- Update screen -->
+    <string name="update_host_title">Actualizar host</string>
+
+    <!-- Virtual machine item -->
+    <string name="power_vm">Botón de encendido</string>
+    <string name="restart_vm">Botón de reinicio</string>
+    <string name="sleep_vm">Botón de hibernación</string>
+    <string name="pause_vm">Botón de pausa</string>
+    <string name="snapshots_vm">Botón de snapshots</string>
+    <string name="snapshot_vm">Botón de crear snapshot</string>
+    <string name="vm_icon">Icono de escritorio</string>
+
+    <!-- Password dialog -->
+    <string name="dialog_password_title">Contraseña SSH</string>
+    <string name="dialog_password_host_msg">Host: %s</string>
+    <string name="cancel_btn">Cancelar</string>
+    <string name="connect_btn">Conectar</string>
+    <string name="error_password_empty">La contraseña no puede estar vacía.</string>
+    <string name="input_password_2">Escribe la contraseña</string>
+
+    <!-- List VMs screen -->
+    <string name="no_vms_msg">No hay máquinas virtuales.</string>
+    <string name="hello_blank_fragment">Hola fragmento en blanco</string>
+    <string name="dialog_snapshot_name_title">Nombre del snapshot</string>
+    <string name="input_snapshot_name">Escribe el nombre</string>
+    <string name="create_snapshot_btn">Crear</string>
+
+    <!-- List Snapshots screen -->
+    <string name="revert_btn_description">Revertir snapshot</string>
+    <string name="delete_btn_description">Eliminar snapshot</string>
+    <string name="no_snapshots_msg">No hay snapshots.</string>
+    <string name="snapshots_title">Snapshots</string>
+    <string name="state_prefix">Estado: %1$s</string>
+
+    <!-- Settings screen -->
+    <string name="settings_language_title">Idioma</string>
+    <string name="settings_language_spanish">Español</string>
+    <string name="settings_language_english">Inglés</string>
+</resources>

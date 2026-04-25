@@ -63,4 +63,9 @@
     <string name="snapshots_title">Snapshots</string>
     <string name="state_prefix">State: %1$s</string>
 
+    <!-- Settings screen -->
+    <string name="settings_language_title">Language</string>
+    <string name="settings_language_spanish">Spanish</string>
+    <string name="settings_language_english">English</string>
+
 </resources>
