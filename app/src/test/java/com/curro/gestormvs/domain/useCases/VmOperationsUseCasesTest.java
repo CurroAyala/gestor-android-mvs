@@ -497,8 +497,7 @@ public class VmOperationsUseCasesTest {
         // When & Then
         assertThrows(IllegalArgumentException.class, () -> hibernateVMUseCase.execute(vm));
         verify(mockSshRepository, never()).hibernateVM(vm);
-        verify(mockSshRepository, never()).restoreVM(vm);
-        verify(mockSshRepository, never()).checkSaveFile(vm.getName());
+        verify(mockSshRepository, never()).startVM(vm);
     }
 
     @Test
@@ -514,7 +513,7 @@ public class VmOperationsUseCasesTest {
     }
 
     @Test
-    public void givenRunningVm_whenHibernate_thenRestoreAndCheckSaveFileAreNeverCalled() {
+    public void givenRunningVm_whenHibernate_thenStartVmIsNeverCalled() {
         // Given
         VirtualMachine vm = new VirtualMachine(1, "ubuntu-20.04", "running");
 
@@ -522,28 +521,25 @@ public class VmOperationsUseCasesTest {
         hibernateVMUseCase.execute(vm);
 
         // Then
-        verify(mockSshRepository, never()).restoreVM(vm);
-        verify(mockSshRepository, never()).checkSaveFile(vm.getName());
+        verify(mockSshRepository, never()).startVM(vm);
     }
 
     @Test
-    public void givenShutOffVmWithExistingSaveFile_whenHibernate_thenRestoreVmIsCalled() {
+    public void givenShutOffVm_whenHibernate_thenStartVmIsCalled() {
         // Given
         VirtualMachine vm = new VirtualMachine(null, "centos-7", "shut off");
-        when(mockSshRepository.checkSaveFile(vm.getName())).thenReturn(true);
 
         // When
         hibernateVMUseCase.execute(vm);
 
         // Then
-        verify(mockSshRepository, times(1)).restoreVM(vm);
+        verify(mockSshRepository, times(1)).startVM(vm);
     }
 
     @Test
-    public void givenShutOffVmWithExistingSaveFile_whenHibernate_thenHibernateVmIsNeverCalled() {
+    public void givenShutOffVm_whenHibernate_thenHibernateVmIsNeverCalled() {
         // Given
         VirtualMachine vm = new VirtualMachine(null, "centos-7", "shut off");
-        when(mockSshRepository.checkSaveFile(vm.getName())).thenReturn(true);
 
         // When
         hibernateVMUseCase.execute(vm);
@@ -552,6 +548,8 @@ public class VmOperationsUseCasesTest {
         verify(mockSshRepository, never()).hibernateVM(vm);
     }
 
+    // Deprecated with managed save
+    /*
     @Test
     public void givenShutOffVmWithNoSaveFile_whenHibernate_thenThrowsRuntimeException() {
         // Given
@@ -583,6 +581,7 @@ public class VmOperationsUseCasesTest {
         assertThrows(RuntimeException.class, () -> hibernateVMUseCase.execute(vm));
         verify(mockSshRepository, times(1)).checkSaveFile(vm.getName());
     }
+     */
 
     @Test
     public void givenRepositoryThrowsOnHibernate_whenHibernate_thenExceptionPropagates() {
@@ -596,12 +595,11 @@ public class VmOperationsUseCasesTest {
     }
 
     @Test
-    public void givenRepositoryThrowsOnRestore_whenHibernate_thenExceptionPropagates() {
+    public void givenRepositoryThrowsOnStart_whenHibernate_thenExceptionPropagates() {
         // Given
         VirtualMachine vm = new VirtualMachine(null, "centos-7", "shut off");
-        when(mockSshRepository.checkSaveFile(vm.getName())).thenReturn(true);
         doThrow(new RuntimeException("Error creating channel"))
-                .when(mockSshRepository).restoreVM(vm);
+                .when(mockSshRepository).startVM(vm);
 
         // When & Then
         assertThrows(RuntimeException.class, () -> hibernateVMUseCase.execute(vm));
