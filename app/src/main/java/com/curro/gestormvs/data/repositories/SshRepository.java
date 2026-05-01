@@ -126,6 +126,8 @@ public class SshRepository {
 
     }
 
+    // Unnecessary with managed save
+    /*
     public boolean checkSaveFile(String vmName) {
 
         String command = "[ -f /var/lib/libvirt/qemu/save/"+vmName+".save ] && echo true || echo false";
@@ -162,6 +164,7 @@ public class SshRepository {
         return res;
 
     }
+     */
 
     @SuppressWarnings("BusyWait")
     public void executeSnapshotOperation(String action, VirtualMachine vm, String snapshotName) {
@@ -286,8 +289,11 @@ public class SshRepository {
         executeVMOperation("resume", vm);
     }
 
+    public void hibernateVM(VirtualMachine vm) { executeVMOperation("managedsave", vm); }
 
-    // Specific methods for hibernation
+
+    // Specific methods for hibernation: UNUSED WITH MANAGED SAVE
+    /*
     @SuppressWarnings("BusyWait")
     public void hibernateVM(VirtualMachine vm) {
 
@@ -352,6 +358,7 @@ public class SshRepository {
 
     }
 
+
     @SuppressWarnings("BusyWait")
     public void restoreVM(VirtualMachine vm) {
 
@@ -415,6 +422,7 @@ public class SshRepository {
         }
 
     }
+    */
 
 
     // Specific methods for snapshots

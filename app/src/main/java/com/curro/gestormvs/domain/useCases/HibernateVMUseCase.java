@@ -31,12 +31,15 @@ public class HibernateVMUseCase {
                 }
                 break;
             case "shut off":
+                // Unnecessary with managed save
+                /*
                 boolean existingSaveFile = sshRepository.checkSaveFile(vm.getName());
                 if (!existingSaveFile) {
                     throw new RuntimeException("No save file found for virtual machine");
                 }
+                */
 
-                sshRepository.restoreVM(vm);
+                sshRepository.startVM(vm);
 
                 try {
                     Thread.sleep(2000);
